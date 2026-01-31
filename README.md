@@ -1,16 +1,26 @@
-# React + Vite
+Event Management System – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend of the Real-Time Event Management System, built using React.js and Tailwind CSS.
+The UI allows users to browse events, view details, register for events, and manage events they have created. It communicates with the backend through secure APIs and provides a clean, responsive user experience.
 
-Currently, two official plugins are available:
+Features
+1. User authentication (login & register)
+2. View all events and event details
+3. Create, edit, and delete events (creator only)
+4. Register for events
+5. Role-based UI rendering
+6. Responsive and modern design
+7. Toast notifications for user feedback
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tech Stack
+1. React.js
+2. Tailwind CSS
+3. React Router
+4. Axios
+5. react-hot-toast
 
-## React Compiler
+Run Locally
+npm install,
+npm run dev.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This frontend is optimized for usability, responsiveness, and seamless integration with the backend.
