@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://eventify-backend-9y9n.onrender.com",
+  baseURL: "https://eventify-backend-9y9n.onrender.com/api",
 });
 
 // Add token automatically if exists
