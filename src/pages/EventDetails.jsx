@@ -46,12 +46,10 @@ export default function EventDetails() {
 
       setEvent((prev) => ({
         ...prev,
-        registrations: [...prev.registrations, userId],
+        registrations: [...(prev.registrations || []), userId],
       }));
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Registration failed"
-      );
+      toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setProcessing(false);
     }
@@ -71,9 +69,7 @@ export default function EventDetails() {
         ),
       }));
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Deregistration failed"
-      );
+      toast.error(error.response?.data?.message || "Deregistration failed");
     } finally {
       setProcessing(false);
     }
@@ -93,34 +89,25 @@ export default function EventDetails() {
     }
   };
 
-  if (loading) {
-    return <p className="p-6 text-slate-500">Loading…</p>;
-  }
-
-  if (!event) {
-    return <p className="p-6">Event not found</p>;
-  }
+  if (loading) return <p className="p-6 text-slate-500">Loading…</p>;
+  if (!event) return <p className="p-6">Event not found</p>;
 
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="rounded-2xl bg-white border border-slate-200 p-8">
-          {/* Date */}
           <div className="mb-4 inline-block rounded-full bg-indigo-50 px-4 py-1 text-sm font-medium text-indigo-600">
             {new Date(event.date).toDateString()}
           </div>
 
-          {/* Title */}
           <h1 className="text-3xl font-semibold text-slate-900">
             {event.title}
           </h1>
 
-          {/* Description */}
           <p className="mt-4 text-slate-600 leading-relaxed">
             {event.description}
           </p>
 
-          {/* Meta */}
           <div className="mt-6 space-y-2 text-slate-500">
             <p>📍 Location: {event.location}</p>
             <p>⏰ Time: {event.time}</p>
@@ -132,9 +119,7 @@ export default function EventDetails() {
             </p>
           </div>
 
-          {/* Actions */}
           <div className="mt-8 flex flex-wrap gap-4">
-            {/* Register / Deregister */}
             {isRegistered ? (
               <button
                 onClick={handleDeregister}
@@ -153,7 +138,6 @@ export default function EventDetails() {
               </button>
             )}
 
-            {/* Creator-only */}
             {isCreator && (
               <>
                 <button
