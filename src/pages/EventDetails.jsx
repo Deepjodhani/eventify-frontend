@@ -4,6 +4,7 @@ import {
   getEventById,
   registerForEvent,
   deleteEvent,
+  deregisterForEvent,
 } from "../services/api";
 import toast from "react-hot-toast";
 
@@ -13,33 +14,72 @@ export default function EventDetails() {
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [registering, setRegistering] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    getEventById(id)
-      .then((res) => {
-        setEvent(res.data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetchEvent();
+    // eslint-disable-next-line
   }, [id]);
 
+  const fetchEvent = async () => {
+    try {
+      const res = await getEventById(id);
+      setEvent(res.data);
+    } catch {
+      toast.error("Failed to load event");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isCreator = event?.user?._id === userId;
+  const isRegistered = event?.registrations?.includes(userId);
+
+  // REGISTER
   const handleRegister = async () => {
     try {
-      setRegistering(true);
+      setProcessing(true);
       await registerForEvent(id);
-      toast.success("You are registered for this event 🎉");
+      toast.success("Registered successfully 🎉");
+
+      setEvent((prev) => ({
+        ...prev,
+        registrations: [...prev.registrations, userId],
+      }));
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Registration failed"
       );
     } finally {
-      setRegistering(false);
+      setProcessing(false);
     }
   };
 
+  // DEREGISTER
+  const handleDeregister = async () => {
+    try {
+      setProcessing(true);
+      await deregisterForEvent(id);
+      toast.success("Deregistered successfully");
+
+      setEvent((prev) => ({
+        ...prev,
+        registrations: prev.registrations.filter(
+          (uid) => uid !== userId
+        ),
+      }));
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Deregistration failed"
+      );
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  // DELETE
   const handleDelete = async () => {
     try {
       await deleteEvent(id);
@@ -60,8 +100,6 @@ export default function EventDetails() {
   if (!event) {
     return <p className="p-6">Event not found</p>;
   }
-
-  const isCreator = event.user?._id === userId;
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -96,15 +134,26 @@ export default function EventDetails() {
 
           {/* Actions */}
           <div className="mt-8 flex flex-wrap gap-4">
-            <button
-              onClick={handleRegister}
-              disabled={registering}
-              className="rounded-xl bg-indigo-600 px-6 py-3 text-white font-medium hover:bg-indigo-700 disabled:opacity-50"
-            >
-              {registering ? "Registering…" : "Register for Event"}
-            </button>
+            {/* Register / Deregister */}
+            {isRegistered ? (
+              <button
+                onClick={handleDeregister}
+                disabled={processing}
+                className="rounded-xl border border-red-500 px-6 py-3 text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
+              >
+                Deregister
+              </button>
+            ) : (
+              <button
+                onClick={handleRegister}
+                disabled={processing}
+                className="rounded-xl bg-indigo-600 px-6 py-3 text-white font-medium hover:bg-indigo-700 disabled:opacity-50 transition"
+              >
+                {processing ? "Processing…" : "Register for Event"}
+              </button>
+            )}
 
-            {/* Creator-only actions */}
+            {/* Creator-only */}
             {isCreator && (
               <>
                 <button
