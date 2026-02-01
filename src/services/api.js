@@ -27,7 +27,7 @@ export const registerForEvent = (id) =>
 export const createEvent = (data) => API.post("/events", data);
 export const deleteEvent = (id) => API.delete(`/events/${id}`);
 export const updateEvent = (id, data) => API.put(`/events/${id}`, data);
-export const deregisterForEvent = (id) => API.post(`/events/${id}/deregister`);
+export const deregisterForEvent = (id) => API.delete(`/events/${id}/deregister`);
 
 
 
